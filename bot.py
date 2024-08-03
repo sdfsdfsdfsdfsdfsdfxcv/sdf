@@ -3,7 +3,6 @@ import requests
 import pytz
 from datetime import datetime
 from telegram import Bot
-from googletrans import Translator
 import pandas as pd
 import ta
 
@@ -17,20 +16,12 @@ NEWS_API = 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN'
 TRENDING_API = 'https://api.coingecko.com/api/v3/search/trending'
 BITCOIN_HISTORICAL = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=120&interval=daily'
 
-# Initialize Translator
-translator = Translator()
 
-def translate_to_persian(text):
-    try:
-        return translator.translate(text, dest='fa').text
-    except Exception as e:
-        print(f"Translation error: {e}")
-        return text
 
 def add_emojis(text):
     crypto_emojis = {"بیت‌کوین": "💰", "اتریوم": "🔷", "اخبار": "📰", "هشدار": "🚨", "آموزش": "📚", "معامله": "📈", "سرگرمی": "😄"}
     for key, emoji in crypto_emojis.items():
-        text = text.replace(key, f"{key} {emoji}")
+        text = text.replace(key, f"{emoji} {key}")
     return text
 
 def get_price_change_emoji(change):
@@ -148,8 +139,8 @@ async def post_crypto_news(bot):
     if news['Data']:
         for article in news['Data'][:3]:
             message = f"📰 اخبار ارزهای دیجیتال:\n\n"
-            message += f"<b>{translate_to_persian(article['title'])}</b>\n\n"
-            message += f"{translate_to_persian(article['body'][:200])}...\n\n"
+            message += f"<b>{article['title']}</b>\n\n"
+            message += f"{article['body'][:200]}...\n\n"
             message += f"<a href='{article['url']}'>ادامه مطلب</a>\n\n"
             message += "#اخبار_کریپتو"
             await send_message(bot, message)
