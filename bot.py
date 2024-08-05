@@ -162,16 +162,8 @@ async def post_trending_coins(bot):
 
 async def main():
     bot = Bot(token=TOKEN)
-    now = datetime.now(pytz.timezone('Asia/Tehran'))
-    hour = now.hour
-    if 9 <= hour < 12:
-        await post_market_update(bot)
-    elif 12 <= hour < 15:
-        await post_bitcoin_analysis(bot)
-    elif 15 <= hour < 18:
-        await post_crypto_news(bot)
-    elif 17 <= hour < 20:
-        await post_trending_coins(bot)
+    await post_market_update(bot)
+    await post_trending_coins(bot)
 
 if __name__ == '__main__':
     import asyncio
